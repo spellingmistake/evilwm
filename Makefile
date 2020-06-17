@@ -55,6 +55,9 @@ OPT_CPPFLAGS += -DVWM
 # like Alt+Tab
 OPT_CPPFLAGS += -DDISREGARD_HOTKEYS
 
+# Uncomment to map KEY_TOPLEFT to XK_z (suitable for quertz keyboards)
+#OPT_CPPFLAGS += -DQWERTZ_KEYMAP
+
 ############################################################################
 # Include file and library paths
 
