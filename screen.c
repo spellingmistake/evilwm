@@ -583,6 +583,9 @@ static KeySym keys_to_grab[] = {
 	KEY_FIX, KEY_PREVDESK, KEY_NEXTDESK, KEY_TOGGLEDESK,
 	XK_1, XK_2, XK_3, XK_4, XK_5, XK_6, XK_7, XK_8,
 #endif
+#ifdef DISREGARD_HOTKEYS
+	KEY_IGNORE_KEYS,
+#endif
 	KEY_NEW, KEY_KILL,
 	KEY_TOPLEFT, KEY_TOPRIGHT, KEY_BOTTOMLEFT, KEY_BOTTOMRIGHT,
 	KEY_LEFT, KEY_RIGHT, KEY_DOWN, KEY_UP,
@@ -609,6 +612,38 @@ void grab_keys_for_screen(ScreenInfo *s) {
 		grab_keysym(s->root, grabmask1 | altmask, alt_keys_to_grab[i]);
 	}
 	grab_keysym(s->root, grabmask2, KEY_NEXT);
+}
+
+void ungrab_keys_for_screen(ScreenInfo *s) {
+	/* Release any previous grabs */
+	XUngrabKey(dpy, AnyKey, AnyModifier, s->root);
+	grab_keysym(s->root, grabmask1, KEY_IGNORE_KEYS);
+}
+
+void ungrab_client_buttons_for_screen(ScreenInfo *s)
+{
+	struct list *iter;
+
+	for (iter = clients_tab_order; iter; iter = iter->next) {
+		Client *c = iter->data;
+		if (c->screen != s)
+			continue;
+		ungrab_button(c->parent, grabmask2, AnyButton);
+		ungrab_button(c->parent, grabmask2 | altmask, AnyButton);
+	}
+}
+
+void grab_client_buttons_for_screen(ScreenInfo *s)
+{
+	struct list *iter;
+
+	for (iter = clients_tab_order; iter; iter = iter->next) {
+		Client *c = iter->data;
+		if (c->screen != s)
+			continue;
+		grab_button(c->parent, grabmask2, AnyButton);
+		grab_button(c->parent, grabmask2 | altmask, AnyButton);
+	}
 }
 
 // Wrap XQueryPointer()

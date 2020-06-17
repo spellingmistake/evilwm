@@ -66,6 +66,8 @@ volatile Window initialising = None;
 
 /* Event loop will run until this flag is set */
 int wm_exit;
+/* Pass (almost) all keypresses to window */
+int ignore_keys;
 
 static void set_app(const char *arg);
 static void set_app_geometry(const char *arg);

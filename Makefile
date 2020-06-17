@@ -50,6 +50,11 @@ OPT_CPPFLAGS += -DVWM
 #OPT_CPPFLAGS += -DDEBUG   # miscellaneous debugging
 #OPT_CPPFLAGS += -DXDEBUG  # show some X calls
 
+# Uncomment to use Ctrl+Alt+Space as hotkey to toggle processing of key
+# events and button presses. This allows for clients to receive key events
+# like Alt+Tab
+OPT_CPPFLAGS += -DDISREGARD_HOTKEYS
+
 ############################################################################
 # Include file and library paths
 

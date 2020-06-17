@@ -29,6 +29,21 @@ static void handle_key_event(XKeyEvent *e) {
 	int width_inc, height_inc;
 	ScreenInfo *current_screen = find_current_screen();
 
+	if (key == KEY_IGNORE_KEYS) {
+		ignore_keys = (ignore_keys + 1) % 2;
+
+		if (ignore_keys) {
+			ungrab_keys_for_screen(current_screen);
+			ungrab_client_buttons_for_screen(current_screen);
+		} else {
+			grab_keys_for_screen(current_screen);
+			grab_client_buttons_for_screen(current_screen);
+		}
+
+		return;
+	}
+
+
 	switch(key) {
 		case KEY_NEW:
 			spawn((const char *const *)opt_term);

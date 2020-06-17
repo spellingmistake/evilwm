@@ -99,6 +99,12 @@ typedef struct {
 		            ButtonMask, GrabModeAsync, GrabModeSync, \
 		            None, None); \
 	} while (0)
+#define ungrab_button(w, mask, button) do { \
+		XUngrabButton(dpy, button, (mask), w); \
+		XUngrabButton(dpy, button, LockMask|(mask), w); \
+		XUngrabButton(dpy, button, numlockmask|(mask), w); \
+		XUngrabButton(dpy, button, numlockmask|LockMask|(mask), w); \
+	} while (0)
 #define setmouse(w, x, y) XWarpPointer(dpy, None, w, 0, 0, 0, 0, x, y)
 Bool get_pointer_root_xy(Display *display, Window w, int *x, int *y); // Wraps XQueryPointer()
 
@@ -233,6 +239,8 @@ extern volatile Window  initialising;
 
 /* Event loop will run until this flag is set */
 extern int wm_exit;
+/* Ignore all keys except for KEY_IGNORE_KEYS until toggled */
+extern int ignore_keys;
 
 /* client.c */
 
@@ -285,6 +293,9 @@ void fix_screen_after_resize(ScreenInfo *s, int oldw, int oldh);
 ScreenInfo *find_screen(Window root);
 ScreenInfo *find_current_screen(void);
 void grab_keys_for_screen(ScreenInfo *s);
+void ungrab_keys_for_screen(ScreenInfo *s);
+void grab_client_buttons_for_screen(ScreenInfo *s);
+void ungrab_client_buttons_for_screen(ScreenInfo *s);
 
 /* ewmh.c */
 
